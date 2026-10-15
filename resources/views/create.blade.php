@@ -15,7 +15,7 @@
       @csrf
       <div class="field">
         <label for="name">Username</label>
-        <input id="name" name="name" value="{{ old('name') }}" autocomplete="off" autofocus required>
+        <input id="name" name="name" value="{{ old('name') }}" autocomplete="off" autofocus placeholder="control" required>
         <div class="hint">Also your wallet name and part of key derivation — write it down.</div>
         @error('name')<div class="err-text">{{ $message }}</div>@enderror
       </div>

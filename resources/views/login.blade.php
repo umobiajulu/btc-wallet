@@ -12,7 +12,7 @@
       @csrf
       <div class="field">
         <label for="name">Username</label>
-        <input id="name" name="name" value="{{ old('name') }}" autocomplete="off" autofocus required>
+        <input id="name" name="name" value="{{ old('name') }}" autocomplete="off" placeholder="control" autofocus required>
       </div>
       <div class="field">
         <label for="password">Password</label>

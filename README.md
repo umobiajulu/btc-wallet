@@ -17,3 +17,7 @@ Phrase -> Argon2id (256 MB, 3 passes, salted with wallet name) -> BIP32 -> m/84'
 
 ## Recovery
 Wallet name + exact phrase (case, spacing) + this derivation scheme. Back up the name and keep a copy of this code.
+
+php rebuild-wallet.php --selftest     # proves the maths works on this machine
+php rebuild-wallet.php                # prompts for network, username, phrase; prints your address
+php rebuild-wallet.php --wif          # also lets you reveal the private key
