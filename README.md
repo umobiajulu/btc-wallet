@@ -6,16 +6,15 @@ Phrase -> Argon2id (256 MB, 3 passes, salted with wallet name) -> BIP32 -> m/84'
 
 ## Install
     cd btc-wallet
-    php artisan migrate
+    composer install
     copy .env.example to .env
-    php artisan key:gen
     composer require bitwasp/bitcoin          # needs php-gmp and php-sodium
     # in .env set:
     #   APP_DEBUG=false          (debug pages can leak form data)
     #   SESSION_ENCRYPT=true
     #   BTC_NETWORK=mainnet      
     #   BTC_API_MAINNET=https://blockstream.info/api
-    php artisan migrate        # (use migrate:fresh if you ran the earlier version)
+    php artisan migrate && php artisan key:gen        # (use migrate:fresh if you ran the earlier version)
     php artisan serve --host=127.0.0.1       # keep it local-only
 
 ## Recovery
