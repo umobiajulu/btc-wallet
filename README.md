@@ -6,6 +6,9 @@ Phrase -> Argon2id (256 MB, 3 passes, salted with wallet name) -> BIP32 -> m/84'
 
 ## Install
     cd btc-wallet
+    php artisan migrate
+    copy .env.example to .env
+    php artisan key:gen
     composer require bitwasp/bitcoin          # needs php-gmp and php-sodium
     # in .env set:
     #   APP_DEBUG=false          (debug pages can leak form data)
