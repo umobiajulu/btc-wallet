@@ -1,0 +1,19 @@
+# Local BTC Wallet (Laravel)
+
+Single-address (BIP84 native SegWit, bc1q... / tb1q...) wallet. Seed phrase can be any text.
+The seed phrase is used once at creation. The DB stores the derived seed encrypted with your wallet password (Argon2id + secretbox). Log in and sign with the password.
+Phrase -> Argon2id (256 MB, 3 passes, salted with wallet name) -> BIP32 -> m/84'/coin'/0'/0/0.
+
+## Install
+    cd btc-wallet
+    composer require bitwasp/bitcoin          # needs php-gmp and php-sodium
+    # in .env set:
+    #   APP_DEBUG=false          (debug pages can leak form data)
+    #   SESSION_ENCRYPT=true
+    #   BTC_NETWORK=mainnet      
+    #   BTC_API_MAINNET=https://blockstream.info/api
+    php artisan migrate        # (use migrate:fresh if you ran the earlier version)
+    php artisan serve --host=127.0.0.1       # keep it local-only
+
+## Recovery
+Wallet name + exact phrase (case, spacing) + this derivation scheme. Back up the name and keep a copy of this code.
