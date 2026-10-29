@@ -242,12 +242,24 @@ function normalize_phrase(string $p): string
     if (class_exists('Normalizer')) $p = Normalizer::normalize($p, Normalizer::FORM_KD) ?: $p;
     return $p;
 }
+
+function canon(string $s): string
+{
+    if (class_exists('Normalizer')) $s = Normalizer::normalize($s, Normalizer::FORM_KD) ?: $s;
+    $s = preg_replace('/[\x{2018}-\x{201B}]/u', "'", $s);          // curly single quotes
+    $s = preg_replace('/[\x{201C}-\x{201E}]/u', '"', $s);          // curly double quotes
+    $s = preg_replace('/[\x{2013}\x{2014}\x{2212}]/u', '-', $s);   // en/em dash, minus sign
+    $s = preg_replace('/[\x{200B}-\x{200D}\x{2060}\x{FEFF}]/u', '', $s); // invisible characters
+    return trim(preg_replace('/\s+/u', ' ', $s));
+}
+
 function seed_from_phrase(string $user, string $phrase, string $network): string
 {
     if (!function_exists('sodium_crypto_pwhash')) fail("The 'sodium' PHP extension is required (built into PHP 7.3+).");
-    $lower = function_exists('mb_strtolower') ? mb_strtolower(trim($user)) : strtolower(trim($user));
+    $u     = canon($user);
+    $lower = function_exists('mb_strtolower') ? mb_strtolower($u) : strtolower($u);
     $salt  = substr(hash('sha256', 'btc-local-wallet-v1|' . $network . '|' . $lower, true), 0, 16);
-    return sodium_crypto_pwhash(64, normalize_phrase($phrase), $salt, ARGON_OPS, ARGON_MEM, ARGON_ALG);
+    return sodium_crypto_pwhash(64, canon($phrase), $salt, ARGON_OPS, ARGON_MEM, ARGON_ALG);
 }
 
 /* ------------------------------------------------------------------ *

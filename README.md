@@ -17,6 +17,14 @@ Phrase -> Argon2id (256 MB, 3 passes, salted with wallet name) -> BIP32 -> m/84'
     php artisan migrate && php artisan key:gen        # (use migrate:fresh if you ran the earlier version)
     php artisan serve --host=127.0.0.1       # keep it local-only
 
+    # the frond end version in in btc-wallet/frontend/btc-wallet
+        cd btc-wallet/frontend/btc-wallet
+        npm install
+        npm run dev
+
+### Alternatively
+    open https://wallet.predict.ng and use it online for free
+
 ## Recovery
 Wallet name + exact phrase (case, spacing) + this derivation scheme. Back up the name and keep a copy of this code.
 

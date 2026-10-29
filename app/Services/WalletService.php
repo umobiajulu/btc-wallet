@@ -22,20 +22,23 @@ class WalletService
 {
     public const DUST = 294;
 
-    public function normalize(string $phrase): string
+    public function normalize(string $s): string
     {
-        $phrase = preg_replace('/\s+/u', ' ', trim($phrase));
         if (class_exists(\Normalizer::class)) {
-            $phrase = \Normalizer::normalize($phrase, \Normalizer::FORM_KD) ?: $phrase;
+            $s = \Normalizer::normalize($s, \Normalizer::FORM_KD) ?: $s;
         }
-        return $phrase;
+        $s = preg_replace('/[\x{2018}-\x{201B}]/u', "'", $s);
+        $s = preg_replace('/[\x{201C}-\x{201E}]/u', '"', $s);
+        $s = preg_replace('/[\x{2013}\x{2014}\x{2212}]/u', '-', $s);
+        $s = preg_replace('/[\x{200B}-\x{200D}\x{2060}\x{FEFF}]/u', '', $s);
+        return trim(preg_replace('/\s+/u', ' ', $s));
     }
 
     /** Seed phrase (any text) -> 64-byte seed. Used once, at wallet creation. */
     public function seedFromPhrase(string $walletName, string $phrase, string $network): string
     {
         // Deterministic salt from wallet name => wallet is recoverable from (name + phrase) alone.
-        $salt = substr(hash('sha256', 'btc-local-wallet-v1|' . $network . '|' . mb_strtolower(trim($walletName)), true), 0, SODIUM_CRYPTO_PWHASH_SALTBYTES);
+        $salt = substr(hash('sha256', 'btc-local-wallet-v1|' . $network . '|' . mb_strtolower($this->normalize($walletName)), true), 0, SODIUM_CRYPTO_PWHASH_SALTBYTES);
 
         return sodium_crypto_pwhash(
             64,
